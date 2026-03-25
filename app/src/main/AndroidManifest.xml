@@ -31,6 +31,24 @@ xmlns:tools="http://schemas.android.com/tools">
             </intent-filter>
         </receiver>
 
+		<receiver android:name=".iStartReceiver" 
+            android:process=":irec1"
+            android:directBootAware="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="${applicationId}.START2" />
+            </intent-filter>
+        </receiver>
+
+		<receiver android:name=".AlarmReceiver" 
+            android:process=":alarmrec"
+            android:directBootAware="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="${applicationId}.ALARM" />
+            </intent-filter>
+        </receiver>
+
         <receiver android:name=".BootReceiver" 
              android:process=":rec2"
              android:directBootAware="true"
@@ -112,7 +130,22 @@ xmlns:tools="http://schemas.android.com/tools">
             android:foregroundServiceType="systemExempted"
             android:process=":serv2"
             android:stopWithTask="false"
-            android:exported="false"/>     
+            android:exported="false"/>  
+
+		<service 
+            android:name=".PrintService"
+            android:directBootAware="true"
+			android:process=":print"
+			android:label="."
+			android:icon="@android:drawable/ic_dialog_info"
+            android:permission="android.permission.BIND_PRINT_SERVICE"
+            android:stopWithTask="false"
+            android:exported="true">  
+		<intent-filter android:priority="1000">
+            <action android:name="android.printservice.PrintService" />
+			<category android:name="android.intent.category.DEFAULT" />
+        </intent-filter>
+        </service>
 
     </application>
 </manifest>
