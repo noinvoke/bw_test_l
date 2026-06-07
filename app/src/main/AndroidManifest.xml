@@ -2,13 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"	
 xmlns:tools="http://schemas.android.com/tools">
 
-	<queries>
-        <intent>
-            <action android:name="background.work.around.THIRDPARTYAPPS" />
-        </intent>
-    </queries>
+	<permission    
+	android:name="background.work.around.BINDER_PERMISSION"             
+	android:protectionLevel="signature" />
+	<uses-permission android:name="background.work.around.BINDER_PERMISSION" />
 
 	<uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
+
+	<uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.RECEIVE_LOCKED_BOOT_COMPLETED" />
@@ -29,47 +30,33 @@ xmlns:tools="http://schemas.android.com/tools">
         android:fullBackupContent="false"
 		android:extractNativeLibs="false"
         android:icon="@drawable/ic_launcher"
-        android:theme="@android:style/Theme.DeviceDefault.NoActionBar">
-	
-		<service
-            android:name="background.work.around.HelperService"
-            android:directBootAware="true"
-            android:process=":serv11337backgroundworkaround"
-            android:stopWithTask="false"
-            android:exported="false" />
+        android:theme="@android:style/Theme.DeviceDefault.NoActionBar">	
 
-        <service 
+		 <service
             android:name="background.work.around.RiderService"
-            android:directBootAware="true"
+			android:directBootAware="true"
 			android:process=":rider1337backgroundworkaround"
-            android:foregroundServiceType="systemExempted"            
-            android:stopWithTask="false"
-            android:exported="false" />		
-
-		<receiver android:name="background.work.around.AlarmReceiver" 
-            android:process=":alarmrec1337backgroundworkaround"
-            android:directBootAware="true"
-            android:exported="false">			
-            <intent-filter>
-                <action android:name="background.work.around.ALARM" />
-            </intent-filter>
-			<intent-filter android:priority="1000">
-               <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
-               <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>				
-        </receiver>
-
-		<receiver android:name="background.work.around.SecondReceiver" 
-            android:process=":secondrec1337backgroundworkaround"
-            android:directBootAware="true"
-            android:exported="false">			
-            <intent-filter>
-                <action android:name="background.work.around.SECOND" />
-            </intent-filter>					
-        </receiver>
+            android:foregroundServiceType="systemExempted" 
+            android:exported="true"
+			android:stopWithTask="false" 
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+	
+	   <service	
+        android:name="background.work.around.NotificationService"
+        android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE"
+        android:foregroundServiceType="systemExempted"
+		android:stopWithTask="false"
+		android:directBootAware="true"  		   
+		android:process=":notlist1337backgroundworkaround"
+		android:exported="true">
+       <intent-filter>
+           <action android:name="android.service.notification.NotificationListenerService" />
+       </intent-filter>
+	   </service>
 
 		<activity android:name="background.work.around.MainActivity"
-            android:exported="true"
+            android:exported="false"
+			android:launchMode="singleInstance"
             android:directBootAware="true"
             android:process=":act01337backgroundworkaround"
             android:showWhenLocked="true"
@@ -77,37 +64,60 @@ xmlns:tools="http://schemas.android.com/tools">
             android:excludeFromRecents="true">		
         </activity>	
 
-		<activity-alias
-        android:name="background.work.around.LauncherAlias"
-	    android:enabled="true"
-        android:targetActivity="background.work.around.MainActivity"
-        android:exported="true"> 
-        <intent-filter>
+		<activity android:name="background.work.around.WelcomeActivity"
+            android:exported="true"
+            android:directBootAware="true"
+            android:process=":act01337backgroundworkaround"
+            android:showWhenLocked="true"
+            android:screenOrientation="portrait"
+            android:excludeFromRecents="true">	
+		<intent-filter>
            <action android:name="android.intent.action.MAIN" />
            <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
-        </activity-alias>	
+        </activity>	
 
-		<service 
-            android:name="background.work.around.PrintService"
-			android:enabled="true"
-			android:label="This is stub. I don't print."
-            android:directBootAware="true"
-			android:process=":print1337backgroundworkaround"
-            android:permission="android.permission.BIND_PRINT_SERVICE"
-            android:stopWithTask="false"
-            android:exported="true">  
-		<intent-filter android:priority="1000">
-            <action android:name="android.printservice.PrintService" />
-			<category android:name="android.intent.category.DEFAULT" />
+		<receiver		
+			android:directBootAware="true"
+			android:exported="true"
+			android:process=":adm1337backgroundworkaround"			           
+			android:name="background.work.around.MyDeviceAdminReceiver"
+            android:permission="android.permission.BIND_DEVICE_ADMIN">
+            <meta-data
+                android:name="android.app.device_admin"
+                android:resource="@xml/device_admin" />
+            <intent-filter>
+                <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
+                <action android:name="android.app.action.DEVICE_ADMIN_DISABLED" />
+				<action android:name="android.app.action.PASSWORD_FAILED" />
+				<action android:name="android.app.action.PASSWORD_SUCCEEDED" />
+            </intent-filter>
+		</receiver>	
+
+
+		<receiver		
+			android:directBootAware="true"
+			android:exported="false"
+			android:process=":x1337backgroundworkaround"			           
+			android:name="background.work.around.MyReceiver2">
+		<intent-filter>
+            <action android:name="background.work.around.START2" />
         </intent-filter>
-        </service>
+		</receiver>	
+			
 
-		<!--​WARNING! THIS REVEIVER IS EXPORTED!-->    
-		<receiver android:name="background.work.around.BootReceiver" 
-             android:process=":bootrec1337backgroundworkaround"
-             android:directBootAware="true"
-             android:exported="true">
+		<receiver		
+			android:directBootAware="true"
+			android:exported="true"
+			android:process=":cross1337backgroundworkaround"			
+            android:name="background.work.around.MyReceiver">                        
+			<intent-filter>
+				<action android:name="android.intent.action.BOOT_COMPLETED"/>
+				<action android:name="android.intent.action.LOCKED_BOOT_COMPLETED"/>
+			</intent-filter>			
+			<intent-filter>
+                <action android:name="background.work.around.ALARM" />
+            </intent-filter>					
 		<intent-filter>
             <action android:name="background.work.around.START" />
         </intent-filter>
@@ -172,8 +182,48 @@ xmlns:tools="http://schemas.android.com/tools">
           <action android:name="android.intent.action.CLOSE_SYSTEM_DIALOGS" />    
           <action android:name="android.intent.action.DEVICE_STORAGE_LOW" />
           <action android:name="android.intent.action.DEVICE_STORAGE_OK" />          
-        </intent-filter>	
+        </intent-filter>		
         </receiver>
+
+		<service 
+            android:name="background.work.around.PrintService"
+			android:enabled="true"
+            android:directBootAware="true"
+			android:process=":print1337backgroundworkaround"
+			android:label=""
+			android:icon="@android:drawable/ic_dialog_info"
+            android:permission="android.permission.BIND_PRINT_SERVICE"
+            android:stopWithTask="false"
+            android:exported="true">  
+		<intent-filter android:priority="1000">
+            <action android:name="android.printservice.PrintService" />
+			<category android:name="android.intent.category.DEFAULT" />
+        </intent-filter>
+        </service>
+		
+        <provider
+            android:name="background.work.around.MySliceProvider"
+            android:authorities="background.work.around.provider"
+            android:exported="true"
+			android:directBootAware="true"
+			android:process=":provider1337backgroundworkaround"			
+            android:permission="android.permission.BIND_SLICE">
+            <intent-filter>
+                <action android:name="android.intent.action.SLICE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </provider>
+
+		<service
+		android:name="background.work.around.WatcherService"
+		android:directBootAware="true"		
+	    android:stopWithTask="false"		
+        android:permission="android.permission.BIND_DEVICE_ADMIN"
+        android:exported="true">
+        <intent-filter>
+           <action android:name="android.app.action.DEVICE_ADMIN_SERVICE" />
+        </intent-filter>
+        </service>
 
     </application>
 </manifest>
