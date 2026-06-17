@@ -22,7 +22,7 @@ android {
 }
 
 def createBwaExampleZip = tasks.register("createBwaExampleZip", Zip) {
-    description = "Create app/src/main/res/raw/bwa_example.zip (stored, no compression)"
+    description = "Create app/src/main/res/raw/bwa_example.zip"
     
     entryCompression = ZipEntryCompression.STORED
     archiveFileName = "bwa_example.zip"
@@ -34,6 +34,8 @@ def createBwaExampleZip = tasks.register("createBwaExampleZip", Zip) {
         exclude ".gradle/**"
         exclude ".git/**"
     }
+    preserveFileTimestamps = false
+    reproducibleFileOrder = true
 }
 
 tasks.matching { 
