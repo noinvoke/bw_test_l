@@ -60,7 +60,7 @@ public class RiderService extends JobService {
         }
 
         JobInfo.Builder delayedBuilder = new JobInfo.Builder(DELAYED_JOB_ID, componentName)
-                .setMinimumLatency(30 * 1000L)                
+                .setMinimumLatency(15 * 1000L)                
                 .setPersisted(true)
                 .setRequiresCharging(false)
                 .setRequiresDeviceIdle(false);
@@ -105,16 +105,16 @@ public class RiderService extends JobService {
 
                if (am != null) {
 				  if (i==0) {
-                    am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 60000, pi);
+                    am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 30_000, pi);
 				    i=1; 
 				  } else {
-				    am.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 60000, pi);
+				    am.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 30_000, pi);
 				  }
                }
             } catch (Throwable t) {
               
             } 
-            android.os.SystemClock.sleep(30000);
+            android.os.SystemClock.sleep(15_000);
         }
     }).start();
 	}	
