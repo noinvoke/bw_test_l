@@ -192,7 +192,7 @@ public class RiderService extends JobService {
 
     @Override
     public final void onDestroy() {		
-        background.work.around.Start.RunService(this);		
+        Start.RunService(this);		
         super.onDestroy();
     }
 }
