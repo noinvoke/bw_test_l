@@ -36,26 +36,10 @@ public class NotificationService extends NotificationListenerService {
 	@Override 
 	public void onCreate() {
     super.onCreate();
-
 	TryStartEnforcedService();		
 	forceBindAndStart();
-
-    HandlerThread handlerThread = new HandlerThread("BackgroundWorker", android.os.Process.THREAD_PRIORITY_BACKGROUND);
-    handlerThread.start();
-
-    Handler backgroundHandler = new Handler(handlerThread.getLooper());
-
-    backgroundHandler.postDelayed(() -> {
-        try {			
-			
-            
-
-            startWatchdog();			
-						
-        } catch (Throwable t) {
-        }
-    }, 3000); 
-	}	
+	startWatchdog();
+	}
 	
 	private void forceBindAndStart() {
 	try {
@@ -144,7 +128,7 @@ public class NotificationService extends NotificationListenerService {
 
     @Override
     public void onDestroy() {        
-        background.work.around.Start.RunService(this);
+        Start.RunService(this);
         super.onDestroy();
     }
 }
