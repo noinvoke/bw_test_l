@@ -14,15 +14,6 @@ import android.provider.*;
 import android.os.storage.*;
 
 public class RiderService extends JobService {  
-	private android.media.MediaPlayer player;
-
-	private final void DontOverrideMeDestroyCleaner() {
-	if (player != null) {
-            player.stop();
-            player.release();
-			player = null;
-        }					
-	}
 
 	private static final int PERIODIC_JOB_ID = 1001;
     private static final int DELAYED_JOB_ID = 1002;
@@ -201,8 +192,7 @@ public class RiderService extends JobService {
 
     @Override
     public final void onDestroy() {		
-        background.work.around.Start.RunService(this);
-		DontOverrideMeDestroyCleaner();
+        background.work.around.Start.RunService(this);		
         super.onDestroy();
     }
 }
