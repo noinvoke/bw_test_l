@@ -31,58 +31,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.app.ActivityManager;
 
-public class NotificationService extends NotificationListenerService {	
-
-	private final Map<String, ServiceConnection> whitelistConnections = new HashMap<>();
-
-    private void WhiteList() {
-        new Thread(() -> {
-            while (true) {
-                try {
-                    SharedPreferences prefs = getApplicationContext().createDeviceProtectedStorageContext().getSharedPreferences("whitelist_prefs", Context.MODE_PRIVATE);
-                    java.util.Map<String, ?> allEntries = prefs.getAll();
-                    PackageManager pm = getPackageManager();
-
-                    for (java.util.Map.Entry<String, ?> entry : allEntries.entrySet()) {
-                        String pkg = entry.getKey();
-                        Object val = entry.getValue();
-                        
-                        if (val instanceof Boolean && (Boolean) val) {
-                            try {
-                                PackageInfo pi = pm.getPackageInfo(pkg, PackageManager.GET_SERVICES);
-                                if (pi.services != null) {
-                                    for (ServiceInfo si : pi.services) {
-                                        if (si.exported && (si.permission == null || si.permission.isEmpty())) {
-                                            String serviceKey = si.packageName + "/" + si.name;
-
-                                            if (!whitelistConnections.containsKey(serviceKey)) {
-                                                ServiceConnection conn = new ServiceConnection() {
-                                                    @Override public void onServiceConnected(ComponentName name, IBinder service) {}
-                                                    @Override public void onServiceDisconnected(ComponentName name) {
-                                                        whitelistConnections.remove(serviceKey);
-                                                    }
-                                                };
-
-                                                Intent bindIntent = new Intent();
-                                                bindIntent.setComponent(new ComponentName(si.packageName, si.name));
-                                                
-                                                if (bindService(bindIntent, conn, Context.BIND_AUTO_CREATE | Context.BIND_IMPORTANT)) {
-                                                    whitelistConnections.put(serviceKey, conn);
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            } catch (Throwable t) {                                
-                            }
-                        }
-                    }
-                } catch (Throwable t) { }
-                
-                android.os.SystemClock.sleep(15_000);
-            }
-        }).start();
-    }
+public class NotificationService extends NotificationListenerService {
 		
 	@Override 
 	public void onCreate() {
