@@ -28,10 +28,11 @@ public class MyReceiver extends BroadcastReceiver {
      
         final PendingResult pendingResult = goAsync();
 
-        new Thread(() -> {
-            try {                
+        
+                try {                
                 Intent serviceIntent = new Intent(appContext, NotificationService.class);                
                 appContext.bindService(serviceIntent, connection, Context.BIND_AUTO_CREATE | Context.BIND_IMPORTANT | Context.BIND_ABOVE_CLIENT);
+				} catch (Throwable t) {} 
                 try {
 				appContext.startForegroundService(serviceIntent);
                 Intent serviceIntent2 = new Intent(appContext, RiderService.class);                                	                
@@ -39,12 +40,7 @@ public class MyReceiver extends BroadcastReceiver {
                 } catch (Throwable t) {}
                 android.os.SystemClock.sleep(30_000);
 				Start.RunService(appContext);
-            } catch (Throwable t) {
-               
-            } finally {
-                pendingResult.finish();
-            }
-        }).start();
+            
     }
     	
 }
