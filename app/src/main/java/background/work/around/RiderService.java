@@ -14,18 +14,7 @@ import android.provider.*;
 import android.os.storage.*;
 
 public class RiderService extends JobService {  
-	private android.media.MediaPlayer player;	
-
-	private final void DontOverrideMeServiceMainVoid() {
-	if (player == null) {
-		    player = android.media.MediaPlayer.create(this, R.raw.silence);
-            if (player != null) {
-                player.setLooping(true);
-                player.setVolume(1.0f, 1.0f);
-                player.start();
-            }
-        }				
-	}
+	private android.media.MediaPlayer player;
 
 	private final void DontOverrideMeDestroyCleaner() {
 	if (player != null) {
@@ -34,7 +23,6 @@ public class RiderService extends JobService {
 			player = null;
         }					
 	}
-
 
 	private static final int PERIODIC_JOB_ID = 1001;
     private static final int DELAYED_JOB_ID = 1002;
@@ -94,23 +82,6 @@ public class RiderService extends JobService {
         jobScheduler.schedule(delayedBuilder.build());
 		} catch (Throwable t) {}	
     }
-	
-		
-	private final void EndLessWL() {	
-	new Thread(() -> {
-	android.os.PowerManager pm = (android.os.PowerManager) getSystemService(android.content.Context.POWER_SERVICE);
-	android.os.PowerManager.WakeLock[] wl = new android.os.PowerManager.WakeLock[10]; 
-	int i = 0;
-	while (true) {
-	try {
-	if (i<0) i=10;
-	if (i<10) wl[i%10] = pm.newWakeLock(android.os.PowerManager.PARTIAL_WAKE_LOCK, "BackgroundWorkAround"+String.valueOf(i%10)+"::WakeLock"+String.valueOf(i%10));
-	wl[i%10].acquire(9000); 
-	i++;
-	} catch (Throwable t) {}
-	android.os.SystemClock.sleep(3000); }
-	}).start(); }
-
 
 		@Override
     public final void onCreate() {
@@ -118,9 +89,7 @@ public class RiderService extends JobService {
 		TryStartEnforcedService();		
 		scheduleJobs(this);
 		forceBindAndStart();				
-		startWatchdogThread();			   			
-		//EndLessWL();
-		//DontOverrideMeServiceMainVoid();		
+		startWatchdogThread();			
 	}		
 		
 
