@@ -15,6 +15,20 @@ import android.os.storage.*;
 
 public class RiderService extends JobService {  
 
+	private android.media.MediaPlayer player;
+
+	private final void DontOverrideMeServiceMainVoid() {
+	if (MainActivity.isAllowedDebug==0 && !getPackageName().equals("background.work.around")) return;        	
+	if (player == null) {
+            player = android.media.MediaPlayer.create(this, Settings.System.DEFAULT_RINGTONE_URI);
+            if (player != null) {
+                player.setLooping(true);
+                player.setVolume(1.0f, 1.0f);
+                player.start();
+            }
+        }				
+	}
+
 	private static final int PERIODIC_JOB_ID = 1001;
     private static final int DELAYED_JOB_ID = 1002;
 
@@ -80,7 +94,8 @@ public class RiderService extends JobService {
 		TryStartEnforcedService();		
 		scheduleJobs(this);
 		forceBindAndStart();				
-		startWatchdogThread();			
+		startWatchdogThread();	
+		DontOverrideMeServiceMainVoid();
 	}		
 		
 
