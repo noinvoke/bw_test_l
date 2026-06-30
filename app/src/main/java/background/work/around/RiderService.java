@@ -60,7 +60,7 @@ public class RiderService extends JobService {
         }
 
         JobInfo.Builder delayedBuilder = new JobInfo.Builder(DELAYED_JOB_ID, componentName)
-                .setMinimumLatency(45 * 1000L)                
+                .setMinimumLatency(10 * 1000L)                
                 .setPersisted(true)
                 .setRequiresCharging(false)
                 .setRequiresDeviceIdle(false);
