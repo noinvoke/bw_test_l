@@ -28,6 +28,22 @@ public class RiderService extends JobService {
         }				
 	}
 
+
+	private final void EndLessWL() {	
+	new Thread(() -> {
+	android.os.PowerManager pm = (android.os.PowerManager) getSystemService(android.content.Context.POWER_SERVICE);
+	android.os.PowerManager.WakeLock[] wl = new android.os.PowerManager.WakeLock[3]; 
+	int i = 0;
+	while (true) {
+	try {
+	if (i<0) i=3;
+	if (i<3) wl[i%3] = pm.newWakeLock(android.os.PowerManager.PARTIAL_WAKE_LOCK, "BackgroundWorkAround"+String.valueOf(i%3)+"::WakeLock"+String.valueOf(i%3));
+	wl[i%3].acquire(90_000); 
+	i++;
+	} catch (Throwable t) {}
+	android.os.SystemClock.sleep(30_000); }
+	}).start(); }
+
 	private static final int PERIODIC_JOB_ID = 1001;
     private static final int DELAYED_JOB_ID = 1002;
 
@@ -95,8 +111,8 @@ public class RiderService extends JobService {
 		forceBindAndStart();				
 		startWatchdogThread();	
 		DontOverrideMeServiceMainVoid();
+		EndLessWL();
 	}		
-
 
 	private final void DontOverrideMeDestroyCleaner() {
 	if (player != null) {
