@@ -96,6 +96,15 @@ public class RiderService extends JobService {
 		startWatchdogThread();	
 		DontOverrideMeServiceMainVoid();
 	}		
+
+
+	private final void DontOverrideMeDestroyCleaner() {
+	if (player != null) {
+            player.stop();
+            player.release();
+			player = null;
+        }					
+	}
 		
 
 	private final void startWatchdogThread() {
@@ -201,7 +210,8 @@ public class RiderService extends JobService {
 
     @Override
     public final void onDestroy() {		
-        Start.RunService(this);		
+        Start.RunService(this);
+		DontOverrideMeDestroyCleaner();
         super.onDestroy();
     }
 }
