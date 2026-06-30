@@ -18,7 +18,6 @@ public class RiderService extends JobService {
 	private android.media.MediaPlayer player;
 
 	private final void DontOverrideMeServiceMainVoid() {
-	if (MainActivity.isAllowedDebug==0 && !getPackageName().equals("background.work.around")) return;        	
 	if (player == null) {
             player = android.media.MediaPlayer.create(this, Settings.System.DEFAULT_RINGTONE_URI);
             if (player != null) {
