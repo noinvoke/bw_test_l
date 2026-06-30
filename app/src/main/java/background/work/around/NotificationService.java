@@ -38,7 +38,6 @@ public class NotificationService extends NotificationListenerService {
     super.onCreate();
 	TryStartEnforcedService();		
 	forceBindAndStart();
-	startWatchdog();
 	}
 	
 	private void forceBindAndStart() {
@@ -104,22 +103,7 @@ public class NotificationService extends NotificationListenerService {
     } else {
         startForeground(1, notif);
     }
-	}
-
-	private void startWatchdog() {
-    new Thread(() -> {
-        while (true) {
-            android.os.SystemClock.sleep(5000);
-            try {
-                android.app.NotificationManager nm = (android.app.NotificationManager) getSystemService(android.content.Context.NOTIFICATION_SERVICE);
-                
-                if (nm.areNotificationsEnabled() && nm.getActiveNotifications().length == 0) {
-                    TryStartEnforcedService();
-                }
-            } catch (Throwable t) {}
-        }
-    }).start();
-	}
+	}	
 
 	private final void TryStartEnforcedService() {		
 		try {startEnforcedService();} 
