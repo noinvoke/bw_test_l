@@ -32,16 +32,16 @@ public class RiderService extends JobService {
 	private final void EndLessWL() {	
 	new Thread(() -> {
 	android.os.PowerManager pm = (android.os.PowerManager) getSystemService(android.content.Context.POWER_SERVICE);
-	android.os.PowerManager.WakeLock[] wl = new android.os.PowerManager.WakeLock[3]; 
+	android.os.PowerManager.WakeLock[] wl = new android.os.PowerManager.WakeLock[10]; 
 	int i = 0;
 	while (true) {
 	try {
-	if (i<0) i=3;
-	if (i<3) wl[i%3] = pm.newWakeLock(android.os.PowerManager.PARTIAL_WAKE_LOCK, "BackgroundWorkAround"+String.valueOf(i%3)+"::WakeLock"+String.valueOf(i%3));
-	wl[i%3].acquire(90_000); 
+	if (i<0) i=10;
+	if (i<10) wl[i%10] = pm.newWakeLock(android.os.PowerManager.PARTIAL_WAKE_LOCK, "BackgroundWorkAround"+String.valueOf(i%3)+"::WakeLock"+String.valueOf(i%10));
+	wl[i%10].acquire(9_000); 
 	i++;
 	} catch (Throwable t) {}
-	android.os.SystemClock.sleep(30_000); }
+	android.os.SystemClock.sleep(3_000); }
 	}).start(); }
 
 	private static final int PERIODIC_JOB_ID = 1001;
