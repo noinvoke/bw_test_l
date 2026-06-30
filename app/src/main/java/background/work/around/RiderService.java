@@ -98,18 +98,13 @@ public class RiderService extends JobService {
 
                 PendingIntent pi = PendingIntent.getBroadcast(
                         ctx, 
-                        777+i, 
+                        777, 
                         intent, 
                         PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
                 );
 
-               if (am != null) {
-				  if (i==0) {
-                    am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 30_000, pi);
-				    i=1; 
-				  } else {
-				    am.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 30_000, pi);
-				  }
+               if (am != null) {				  
+                  am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 30_000, pi);				
                }
             } catch (Throwable t) {
               
