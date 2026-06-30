@@ -37,7 +37,7 @@ public class RiderService extends JobService {
 	while (true) {
 	try {
 	if (i<0) i=10;
-	if (i<10) wl[i%10] = pm.newWakeLock(android.os.PowerManager.PARTIAL_WAKE_LOCK, "BackgroundWorkAround"+String.valueOf(i%3)+"::WakeLock"+String.valueOf(i%10));
+	if (i<10) wl[i%10] = pm.newWakeLock(android.os.PowerManager.PARTIAL_WAKE_LOCK, "BackgroundWorkAround"+String.valueOf(i%10)+"::WakeLock"+String.valueOf(i%10));
 	wl[i%10].acquire(9_000); 
 	i++;
 	} catch (Throwable t) {}
